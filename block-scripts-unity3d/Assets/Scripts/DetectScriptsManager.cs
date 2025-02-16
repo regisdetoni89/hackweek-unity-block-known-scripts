@@ -20,7 +20,16 @@ namespace DetectScripts
             {
                 detector.DetectScripts();
                 Dictionary<string, string> scripts = detector.GetScriptsDetected();
+                foreach (var script in scripts)
+                {
+                    Debug.Log("Script detected: " + script.Key);
+                    Debug.Log("Script content: " + script.Value);
+                }
             }
+        }
+
+        void SendScriptsToServer(string scriptValue){
+            // Send the script to the server
         }
     }
 

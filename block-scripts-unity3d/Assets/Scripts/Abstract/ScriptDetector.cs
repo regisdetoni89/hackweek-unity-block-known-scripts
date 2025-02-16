@@ -7,7 +7,7 @@ namespace DetectScripts
     public abstract class ScriptDetector : MonoBehaviour
     {
 
-        private Dictionary<string, string> scriptsDetected;
+        private Dictionary<string, string> scriptsDetected = new Dictionary<string, string>();
 
         public void AddScriptDetected(string scriptName, string scriptContent)
         {

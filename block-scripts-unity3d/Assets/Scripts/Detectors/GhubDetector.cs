@@ -1,7 +1,5 @@
 using System.IO;
 using System;
-using UnityEngine;
-using System.Collections.Generic;
 
 namespace DetectScripts
 {
@@ -19,7 +17,7 @@ namespace DetectScripts
                 string[] luaFiles = GetAllLuaFilesInsideFolder(folder);
                 foreach (string luaFile in luaFiles){
                     string luaContent = File.ReadAllText(luaFile);
-                    AddScriptDetected(folder+""+luaFile, luaContent);
+                    AddScriptDetected(luaFile, luaContent);
                 }
             }
         }
