@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "block-scripts-unity3d.sln"
+    "dotnet.defaultSolution": "block-scripts-unity3d.sln",
+    "dotnet.preferCSharpExtension": true
 }

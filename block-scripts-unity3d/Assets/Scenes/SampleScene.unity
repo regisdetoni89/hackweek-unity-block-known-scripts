@@ -653,6 +653,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4546583049683821713, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
+      propertyPath: serverEndpoint
+      value: http://localhost:3000/api/scripts/
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546583049683821713, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
       propertyPath: blockInteraction
       value: 
       objectReference: {fileID: 1789674301}

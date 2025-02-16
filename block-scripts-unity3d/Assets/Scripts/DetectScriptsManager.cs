@@ -3,6 +3,14 @@ using System.Text;
 using UnityEngine;
 using System.Security.Cryptography;
 
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+
 namespace DetectScripts{
 
     public struct ScriptStatus{
@@ -15,7 +23,11 @@ namespace DetectScripts{
 
         public ScriptDetector[] scriptDetectors;
 
+        public string serverEndpoint = "http://localhost:3000/api/scripts/";
+
         public GameObject blockInteraction;
+
+        private HttpClient client = new HttpClient();
 
         void Start()
         {
@@ -28,26 +40,33 @@ namespace DetectScripts{
                 detector.DetectScripts();
                 Dictionary<string, string> scripts = detector.GetScriptsDetected();
                 foreach (var script in scripts){
-                    ScriptStatus status = GetScriptStatus(script.Value);
-                    if(status.isMalicious){
-                        blockInteraction.SetActive(true);
-                        Debug.Log("Malicious script detected: " + script.Key);
-                    }
+                    CheckForMaliciousScript(script.Key, script.Value);
                 }
             }
         }
 
-        ScriptStatus GetScriptStatus(string scriptValue){
+        async void CheckForMaliciousScript(string scriptName, string scriptValue){
+            ScriptStatus status = await GetScriptStatus(scriptValue);
+            if(status.isMalicious){
+                blockInteraction.SetActive(true);
+                Debug.Log("Malicious script detected: " + scriptName);
+            }
+        }
+
+        async Task<ScriptStatus> GetScriptStatus(string scriptValue){
             string sha256Script = sha256(scriptValue);
-            ScriptStatus scriptStatus = GetStatusFromServer(sha256Script);
+            ScriptStatus scriptStatus = await GetStatusFromServer(sha256Script);
             return scriptStatus;
         }
 
-        ScriptStatus GetStatusFromServer(string sha256Script){
+        async Task<ScriptStatus> GetStatusFromServer(string sha256Script){
             ScriptStatus status = new ScriptStatus();
-            status.sha256 = sha256Script;
-            status.isMalicious = true;
-            status.exist = true;
+            HttpResponseMessage response = await client.GetAsync(serverEndpoint + sha256Script);
+            if (response.IsSuccessStatusCode)
+            {
+                string statusJsonString = await response.Content.ReadAsStringAsync();
+                status = JsonConvert.DeserializeObject<ScriptStatus>(statusJsonString);
+            }
             return status;
         }
 
