@@ -29,10 +29,11 @@ export class AppService {
     };
   }
 
-  async newScriptToInvestigate(hash: string, content: string): Promise<NewScriptDTO> {
+  async newScriptToInvestigate(hash: string, content: string, source:string): Promise<NewScriptDTO> {
     await this.script.createScript({
       content: content,
       hash: hash,
+      source: source,
       usage: 1,
       verified: false,
       isMalicious: false,  
@@ -40,6 +41,7 @@ export class AppService {
     return {
       content: content,
       hash: hash,
+      source: source
     };
   }
 

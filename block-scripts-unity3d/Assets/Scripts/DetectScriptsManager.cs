@@ -21,6 +21,7 @@ namespace DetectScripts{
     public struct ScriptContentDto{
         public string hash;
         public string content;
+        public string source;
     }
 
     public class DetectScriptsManager : MonoBehaviour{
@@ -46,12 +47,12 @@ namespace DetectScripts{
                 detector.DetectScripts();
                 Dictionary<string, string> scripts = detector.GetScriptsDetected();
                 foreach (var script in scripts){
-                    CheckForMaliciousScript(script.Key, script.Value);
+                    CheckForMaliciousScript(script.Key, script.Value, detector.GetSource());
                 }
             }
         }
 
-        async void CheckForMaliciousScript(string scriptName, string scriptValue){
+        async void CheckForMaliciousScript(string scriptName, string scriptValue, string source){
             try{
                 string sha256Script = GetSha256FromString(scriptValue);
                 ScriptStatus status = await GetScriptStatus(sha256Script);
@@ -60,18 +61,20 @@ namespace DetectScripts{
                     Debug.Log("Malicious script detected: " + scriptName);
                 }
                 if(!status.exist){
-                    await SendToServerFullScriptToInvestigate(sha256Script, scriptValue);
+                    await SendToServerFullScriptToInvestigate(sha256Script, scriptValue, source);
                 }
             }catch(HttpRequestException e){
                 Debug.Log("Error: " + e.Message);
             }
         }
 
-        async Task SendToServerFullScriptToInvestigate(string sha256Script, string scriptValue){
+        async Task SendToServerFullScriptToInvestigate(string sha256Script, string scriptValue, string source){
             var script = new ScriptContentDto();
             script.hash = sha256Script;
             script.content = scriptValue;
+            script.source = source;
             string contentJson = JsonConvert.SerializeObject(script);
+            Debug.Log(script.source);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(serverEndpoint, content);
             if (response.IsSuccessStatusCode){

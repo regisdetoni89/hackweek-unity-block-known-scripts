@@ -7,6 +7,9 @@ namespace DetectScripts{
 
     public class RazerDetector : ScriptDetector{
 
+        public override string GetSource(){
+            return "Razer Synapse";
+        }
         public override void DetectScripts(){
             ReadScriptFiles();
         }
@@ -40,6 +43,9 @@ namespace DetectScripts{
 
         public string[] GetAccountsFolders(){
             string scriptFolder = GetRazerAccountsFolder();
+            if(!Directory.Exists(scriptFolder)){
+                return new string[0];
+            }
             return Directory.GetDirectories(scriptFolder, "*", SearchOption.TopDirectoryOnly);
         }
 

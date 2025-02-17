@@ -17,6 +17,7 @@ model Script {
   id          Int      @id @default(autoincrement())
   hash        String   @unique(sort: Desc)
   content     String
+  source      String   @default("")
   verified    Boolean
   isMalicious  Boolean
   usage       Int

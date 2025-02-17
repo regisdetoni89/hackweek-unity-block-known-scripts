@@ -5,6 +5,10 @@ namespace DetectScripts{
 
     public class GhubDetector : ScriptDetector{
 
+        public override string GetSource(){
+            return "Logitech GHUB";
+        }
+
         public override void DetectScripts(){
             ReadScriptFiles();
         }
@@ -37,6 +41,9 @@ namespace DetectScripts{
 
         public string[] GetScriptFolders(){
             string scriptFolder = GetGHubScriptsFolder();
+            if(!Directory.Exists(scriptFolder)){
+                return new string[0];
+            }
             return Directory.GetDirectories(scriptFolder, "*", SearchOption.TopDirectoryOnly);
         }
 

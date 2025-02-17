@@ -18,7 +18,7 @@ export class AppController {
 
   @Post("scripts")
   async newScriptToInvestigate(@Body() body: NewScriptDTO): Promise<NewScriptDTO> {
-    return this.appService.newScriptToInvestigate(body.hash, body.content);
+    return this.appService.newScriptToInvestigate(body.hash, body.content, body.source);
   }
 
 }
