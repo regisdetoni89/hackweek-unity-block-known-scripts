@@ -387,6 +387,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1373874239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7012509750049393038, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
+  m_PrefabInstance: {fileID: 4230596025522686150}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b3387039164614e88f89e653639cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1507834942
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +477,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507834942}
   m_CullTransparentMesh: 1
+--- !u!114 &1706324645 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2343667448001725709, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
+  m_PrefabInstance: {fileID: 4230596025522686150}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36a19d4e40aad74e9c66b1acc36b19d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1789674301
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,12 +680,20 @@ PrefabInstance:
       objectReference: {fileID: 1789674301}
     - target: {fileID: 4546583049683821713, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
       propertyPath: scriptDetectors.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4546583049683821713, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
+      propertyPath: scriptDetectors.Array.data[0]
+      value: 
+      objectReference: {fileID: 894991927}
     - target: {fileID: 4546583049683821713, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
       propertyPath: scriptDetectors.Array.data[1]
       value: 
-      objectReference: {fileID: 894991927}
+      objectReference: {fileID: 1373874239}
+    - target: {fileID: 4546583049683821713, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
+      propertyPath: scriptDetectors.Array.data[2]
+      value: 
+      objectReference: {fileID: 1706324645}
     - target: {fileID: 7927848615586106615, guid: 144c734e6f373c7438e16d0561f78074, type: 3}
       propertyPath: m_Name
       value: ScriptDetectorManager

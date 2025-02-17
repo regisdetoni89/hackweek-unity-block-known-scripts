@@ -30,7 +30,6 @@ namespace DetectScripts{
             }
             return Directory.GetFiles(folder, "*.lua", SearchOption.AllDirectories);
         }
-
         public string GetUserFolderAppDataLocal(){
             return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         }
