@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ScriptStatusDto } from "./dto/scriptStatusDto";
+import { ScriptStatusDto } from "./dto/scriptStatus.dto";
 import { NewScriptDTO } from "./dto/newScript.dto";
 
 @Injectable()

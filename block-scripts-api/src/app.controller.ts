@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from "@nestjs/common";
 import { AppService } from "./app.service";
-import { ScriptStatusDto } from "./dto/scriptStatusDto";
+import { ScriptStatusDto } from "./dto/scriptStatus.dto";
 import { NewScriptDTO } from "./dto/newScript.dto";
 
 @Controller("api")
