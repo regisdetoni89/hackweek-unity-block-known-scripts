@@ -16,6 +16,10 @@ namespace DetectScripts{
         public bool isMalicious;
         public bool exist;
     }
+    public struct ScriptContentDto{
+        public string hash;
+        public string content;
+    }
 
     public class DetectScriptsManager : MonoBehaviour{
 
@@ -47,6 +51,7 @@ namespace DetectScripts{
             try{
                 string sha256Script = GetSha256FromString(scriptValue);
                 ScriptStatus status = await GetScriptStatus(sha256Script);
+                Debug.Log(status.exist);
                 if(status.isMalicious){
                     // POSSIBLE KICK FROM THE SERVER OR BAN
                     blockInteraction.SetActive(true);
@@ -61,16 +66,17 @@ namespace DetectScripts{
         }
 
         async Task SendToServerFullScriptToInvestigate(string sha256Script, string scriptValue){
-            var script = new Dictionary<string, string>
-            {
-                { "sha256", sha256Script },
-                { "script", scriptValue }
-            };
-            var content = new FormUrlEncodedContent(script);
+            var script = new ScriptContentDto();
+            script.hash = sha256Script;
+            script.content = scriptValue;
+            string contentJson = JsonConvert.SerializeObject(script);
+            Debug.Log(contentJson);
+            var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(serverEndpoint, content);
             if (response.IsSuccessStatusCode)
             {
                 Debug.Log("Script sent to server to investigate");
+                Debug.Log(await response.Content.ReadAsStringAsync());
             }
         }
 
