@@ -4,9 +4,6 @@ import { NewScriptDTO } from "./dto/newScript.dto";
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return "Hello World!";
-  }
 
   getScriptStatusByHash(hash: string): ScriptStatusDto {
     return {
