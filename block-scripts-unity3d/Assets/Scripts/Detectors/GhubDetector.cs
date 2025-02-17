@@ -21,6 +21,9 @@ namespace DetectScripts{
         }
 
         public string[] GetAllLuaFilesInsideFolder(string folder){
+            if(Directory.Exists(folder) == false){
+                return new string[0];
+            }
             return Directory.GetFiles(folder, "*.lua", SearchOption.AllDirectories);
         }
 
