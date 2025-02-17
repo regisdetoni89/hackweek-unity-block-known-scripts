@@ -16,7 +16,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "hash"', () => {
-      expect(appController.checkHash("hash").scriptHash).toBe('hash');
+      expect(appController.checkHash("hash", "76561199").scriptHash).toBe('hash');
     });
   });
 });

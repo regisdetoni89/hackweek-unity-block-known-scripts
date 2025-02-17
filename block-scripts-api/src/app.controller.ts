@@ -7,13 +7,16 @@ import { NewScriptDTO } from "./dto/newScript.dto";
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @Get("scripts/:hash")
-  checkHash(@Param("hash") hash:string): ScriptStatusDto {
-    return this.appService.getScriptStatusByHash(hash);
+  @Get("scripts/:hash/:steamId")
+  async checkHash(@Param("hash") hash:string, @Param("steamId") steamId:string): Promise<ScriptStatusDto> {
+    const status:ScriptStatusDto = await this.appService.getScriptStatusByHash(hash);
+    await this.appService.addUserToScript(steamId, hash);
+    await this.appService.increaseCounter(hash);
+    return status;
   }
 
   @Post("scripts")
-  newScriptToInvestigate(@Body() body: NewScriptDTO): NewScriptDTO {
+  async newScriptToInvestigate(@Body() body: NewScriptDTO): Promise<NewScriptDTO> {
     return this.appService.newScriptToInvestigate(body.hash, body.content);
   }
 

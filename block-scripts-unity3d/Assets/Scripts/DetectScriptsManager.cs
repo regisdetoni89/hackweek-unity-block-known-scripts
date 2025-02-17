@@ -29,6 +29,8 @@ namespace DetectScripts{
 
         public string serverEndpoint = "http://localhost:3000/api/scripts/";
 
+        public string steamId = "7656119123456789";
+
         public GameObject blockInteraction;
 
         private HttpClient client = new HttpClient();
@@ -87,7 +89,7 @@ namespace DetectScripts{
 
         async Task<ScriptStatus> GetStatusFromServer(string sha256Script){
             ScriptStatus status = new ScriptStatus();
-            HttpResponseMessage response = await client.GetAsync(serverEndpoint + sha256Script);
+            HttpResponseMessage response = await client.GetAsync(serverEndpoint + sha256Script + "/" + steamId);
             if (response.IsSuccessStatusCode)
             {
                 string statusJsonString = await response.Content.ReadAsStringAsync();
