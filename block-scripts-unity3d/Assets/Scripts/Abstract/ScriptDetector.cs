@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DetectScripts
-{
-    public abstract class ScriptDetector : MonoBehaviour
-    {
+namespace DetectScripts{
+
+    public abstract class ScriptDetector : MonoBehaviour{
 
         private Dictionary<string, string> scriptsDetected = new Dictionary<string, string>();
 
@@ -22,4 +21,5 @@ namespace DetectScripts
         public abstract void DetectScripts();
 
     }
+
 }

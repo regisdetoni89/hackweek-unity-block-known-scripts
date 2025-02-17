@@ -8,6 +8,7 @@ export class AppService {
   getScriptStatusByHash(hash: string): ScriptStatusDto {
     return {
       exist: false,
+      verified: false,
       isMalicious: false,
       scriptHash: hash,
     };

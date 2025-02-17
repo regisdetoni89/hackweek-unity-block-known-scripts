@@ -15,7 +15,9 @@ namespace DetectScripts{
         public string sha256;
         public bool isMalicious;
         public bool exist;
+        public bool verified;
     }
+
     public struct ScriptContentDto{
         public string hash;
         public string content;
@@ -31,13 +33,11 @@ namespace DetectScripts{
 
         private HttpClient client = new HttpClient();
 
-        void Start()
-        {
+        void Start(){
             DetectScripts();
         }
 
-        void DetectScripts()
-        {
+        void DetectScripts(){
             foreach (var detector in scriptDetectors){
                 detector.DetectScripts();
                 Dictionary<string, string> scripts = detector.GetScriptsDetected();
@@ -51,9 +51,7 @@ namespace DetectScripts{
             try{
                 string sha256Script = GetSha256FromString(scriptValue);
                 ScriptStatus status = await GetScriptStatus(sha256Script);
-                Debug.Log(status.exist);
                 if(status.isMalicious){
-                    // POSSIBLE KICK FROM THE SERVER OR BAN
                     blockInteraction.SetActive(true);
                     Debug.Log("Malicious script detected: " + scriptName);
                 }
@@ -70,17 +68,19 @@ namespace DetectScripts{
             script.hash = sha256Script;
             script.content = scriptValue;
             string contentJson = JsonConvert.SerializeObject(script);
-            Debug.Log(contentJson);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(serverEndpoint, content);
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode){
                 Debug.Log("Script sent to server to investigate");
                 Debug.Log(await response.Content.ReadAsStringAsync());
             }
         }
 
         async Task<ScriptStatus> GetScriptStatus(string sha256Script){
+            if(PlayerPrefs.GetString(sha256Script, "") != ""){
+                string statusJsonString = Encoding.UTF8.GetString(Convert.FromBase64String(PlayerPrefs.GetString(sha256Script)));
+                return JsonConvert.DeserializeObject<ScriptStatus>(statusJsonString);
+            }
             return await GetStatusFromServer(sha256Script);
         }
 
@@ -91,6 +91,9 @@ namespace DetectScripts{
             {
                 string statusJsonString = await response.Content.ReadAsStringAsync();
                 status = JsonConvert.DeserializeObject<ScriptStatus>(statusJsonString);
+                if(status.verified){
+                    PlayerPrefs.SetString(sha256Script, Convert.ToBase64String(Encoding.UTF8.GetBytes(statusJsonString)));
+                }
             }
             return status;
         }
@@ -107,6 +110,5 @@ namespace DetectScripts{
         }
 
     }
-
 
 }

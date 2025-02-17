@@ -1,11 +1,9 @@
 using System.IO;
 using System;
 
-namespace DetectScripts
-{
+namespace DetectScripts{
 
-    public class GhubDetector : ScriptDetector
-    {
+    public class GhubDetector : ScriptDetector{
 
         public override void DetectScripts(){
             ReadScriptFiles();
@@ -40,4 +38,5 @@ namespace DetectScripts
         }
 
     }
+
 }
