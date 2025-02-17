@@ -1,8 +1,25 @@
 import { Injectable } from "@nestjs/common";
+import { ScriptStatusDto } from "./dto/scriptStatusDto";
+import { NewScriptDTO } from "./dto/newScript.dto";
 
 @Injectable()
 export class AppService {
   getHello(): string {
     return "Hello World!";
+  }
+
+  getScriptStatusByHash(hash: string): ScriptStatusDto {
+    return {
+      exist: false,
+      isMalicious: false,
+      scriptHash: hash,
+    };
+  }
+
+  newScriptToInvestigate(hash: string, content: string): NewScriptDTO {
+    return {
+      content: content,
+      hash: hash,
+    };
   }
 }
