@@ -5,6 +5,7 @@ import { NewScriptDTO } from "./dto/newScript.dto";
 
 @Controller("api")
 export class AppController {
+  
   constructor(private readonly appService: AppService) { }
 
   @Get("scripts/:hash/:steamId")
