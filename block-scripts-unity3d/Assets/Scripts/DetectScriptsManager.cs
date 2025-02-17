@@ -33,6 +33,8 @@ namespace DetectScripts{
 
         private HttpClient client = new HttpClient();
 
+        private Dictionary<string, ScriptStatus> cachedScripts = new Dictionary<string, ScriptStatus>();
+
         void Start(){
             DetectScripts();
         }
@@ -77,9 +79,8 @@ namespace DetectScripts{
         }
 
         async Task<ScriptStatus> GetScriptStatus(string sha256Script){
-            if(PlayerPrefs.GetString(sha256Script, "") != ""){
-                string statusJsonString = Encoding.UTF8.GetString(Convert.FromBase64String(PlayerPrefs.GetString(sha256Script)));
-                return JsonConvert.DeserializeObject<ScriptStatus>(statusJsonString);
+            if(cachedScripts.ContainsKey(sha256Script)){
+                return cachedScripts[sha256Script];
             }
             return await GetStatusFromServer(sha256Script);
         }
@@ -92,7 +93,7 @@ namespace DetectScripts{
                 string statusJsonString = await response.Content.ReadAsStringAsync();
                 status = JsonConvert.DeserializeObject<ScriptStatus>(statusJsonString);
                 if(status.verified){
-                    PlayerPrefs.SetString(sha256Script, Convert.ToBase64String(Encoding.UTF8.GetBytes(statusJsonString)));
+                    cachedScripts.Add(sha256Script, status);
                 }
             }
             return status;
