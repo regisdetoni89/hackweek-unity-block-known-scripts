@@ -1,6 +1,7 @@
 using System.IO;
 using System;
 using UnityEngine;
+using Unity.VisualScripting;
 
 namespace DetectScripts{
 
@@ -22,8 +23,9 @@ namespace DetectScripts{
         }
 
         public string[] GetAllXMLFilesInsideMacroFolder(string folder){
-            if(Directory.Exists(folder+"\\Emily3\\Macros\\")){
-                return Directory.GetFiles(folder+"\\Emily3\\Macros\\", "*.xml", SearchOption.AllDirectories);
+            string folderFullMacroPath = Path.Combine(folder, "Emily3", "Macros");
+            if(Directory.Exists(folderFullMacroPath)){
+                return Directory.GetFiles(folderFullMacroPath, "*.xml", SearchOption.AllDirectories);
             }
             return new string[0];
         }
