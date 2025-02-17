@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using System;
 
 namespace DetectScripts{
 
@@ -43,17 +44,38 @@ namespace DetectScripts{
         }
 
         async void CheckForMaliciousScript(string scriptName, string scriptValue){
-            ScriptStatus status = await GetScriptStatus(scriptValue);
-            if(status.isMalicious){
-                blockInteraction.SetActive(true);
-                Debug.Log("Malicious script detected: " + scriptName);
+            try{
+                string sha256Script = GetSha256FromString(scriptValue);
+                ScriptStatus status = await GetScriptStatus(sha256Script);
+                if(status.isMalicious){
+                    // POSSIBLE KICK FROM THE SERVER OR BAN
+                    blockInteraction.SetActive(true);
+                    Debug.Log("Malicious script detected: " + scriptName);
+                }
+                if(!status.exist){
+                    await SendToServerFullScriptToInvestigate(sha256Script, scriptValue);
+                }
+            }catch(HttpRequestException e){
+                Debug.Log("Error: " + e.Message);
             }
         }
 
-        async Task<ScriptStatus> GetScriptStatus(string scriptValue){
-            string sha256Script = sha256(scriptValue);
-            ScriptStatus scriptStatus = await GetStatusFromServer(sha256Script);
-            return scriptStatus;
+        async Task SendToServerFullScriptToInvestigate(string sha256Script, string scriptValue){
+            var script = new Dictionary<string, string>
+            {
+                { "sha256", sha256Script },
+                { "script", scriptValue }
+            };
+            var content = new FormUrlEncodedContent(script);
+            HttpResponseMessage response = await client.PostAsync(serverEndpoint, content);
+            if (response.IsSuccessStatusCode)
+            {
+                Debug.Log("Script sent to server to investigate");
+            }
+        }
+
+        async Task<ScriptStatus> GetScriptStatus(string sha256Script){
+            return await GetStatusFromServer(sha256Script);
         }
 
         async Task<ScriptStatus> GetStatusFromServer(string sha256Script){
@@ -67,7 +89,7 @@ namespace DetectScripts{
             return status;
         }
 
-        public string sha256(string randomString){
+        public string GetSha256FromString(string randomString){
             var crypt = new SHA256Managed();
             var hash = new StringBuilder();
             byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(randomString));
