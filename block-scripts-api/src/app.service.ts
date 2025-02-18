@@ -2,15 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { ScriptStatusDto } from "./dto/scriptStatus.dto";
 import { NewScriptDTO } from "./dto/newScript.dto";
 import { ScriptService } from "./script.service";
-import { Script } from '@prisma/client';
+import { Script } from "@prisma/client";
 
 @Injectable()
 export class AppService {
-
   constructor(private script: ScriptService) {}
 
   async getScriptStatusByHash(hash: string): Promise<ScriptStatusDto> {
-    const scriptFound:Script | null = await this.script.findByHash(hash);
+    const scriptFound: Script | null = await this.script.findByHash(hash);
 
     if (!scriptFound) {
       return {
@@ -29,29 +28,33 @@ export class AppService {
     };
   }
 
-  async newScriptToInvestigate(hash: string, content: string, source:string): Promise<NewScriptDTO> {
+  async newScriptToInvestigate(
+    hash: string,
+    content: string,
+    source: string
+  ): Promise<NewScriptDTO> {
     await this.script.createScript({
       content: content,
       hash: hash,
       source: source,
       usage: 1,
       verified: false,
-      isMalicious: false,  
+      isMalicious: false,
     });
     return {
       content: content,
       hash: hash,
-      source: source
+      source: source,
     };
   }
 
   async addUserToScript(steamId: string, hash: string): Promise<void> {
-    try{
+    try {
       await this.script.createScriptUser({
         hash: hash,
         steamId: steamId,
       });
-    }catch(e){}
+    } catch (e) {}
   }
 
   async increaseCounter(hash: string): Promise<void> {
