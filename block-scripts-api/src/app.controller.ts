@@ -50,7 +50,14 @@ export class AppController {
     @Param("id", new ParseIntPipe()) id: number,
     @Body() body: VerifyScriptDTO
   ) {
-    await this.appService.verifyScript(id, body.isMalicious);
-    return { success: true };
+    try {
+      await this.appService.verifyScript(id, body.isMalicious);
+      return { success: true };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { success: false, error: error.message };
+      }
+      return { success: false, error: "Unknown error" };
+    }
   }
 }
