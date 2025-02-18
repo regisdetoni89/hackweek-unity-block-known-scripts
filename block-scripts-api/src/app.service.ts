@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { ScriptStatusDto } from "./dto/scriptStatus.dto";
-import { NewScriptDTO } from "./dto/newScript.dto";
-import { ScriptService } from "./script.service";
 import { Script } from "@prisma/client";
+import { NewScriptDTO } from "./dto/newScript.dto";
+import { NextScriptDto } from "./dto/nextScript.dto";
+import { ScriptStatusDto } from "./dto/scriptStatus.dto";
+import { ScriptService } from "./script.service";
 
 @Injectable()
 export class AppService {
@@ -59,5 +60,29 @@ export class AppService {
 
   async increaseCounter(hash: string): Promise<void> {
     await this.script.increaseCounter(hash);
+  }
+
+  async verifyScript(id: number, isMalicious: boolean): Promise<void> {
+    try {
+      await this.script.verifyScrypt(id, isMalicious);
+    } catch (error) {
+      throw new Error("Failed to verify script: " + error);
+    }
+  }
+
+  async getNextUnverifiedScript(): Promise<NextScriptDto> {
+    try {
+      const [script, totalCount] = await Promise.all([
+        this.script.getNextUnverifiedScript(),
+        this.script.countUnverifiedScripts(),
+      ]);
+
+      return {
+        script,
+        totalCount,
+      };
+    } catch (error) {
+      throw new Error("Failed to fetch next unverified script: " + error);
+    }
   }
 }

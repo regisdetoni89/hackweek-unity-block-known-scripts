@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from "@nestjs/common";
 import { AppService } from "./app.service";
-import { ScriptStatusDto } from "./dto/scriptStatus.dto";
 import { NewScriptDTO } from "./dto/newScript.dto";
+import { NextScriptDto } from "./dto/nextScript.dto";
+import { ScriptStatusDto } from "./dto/scriptStatus.dto";
+import { VerifyScriptDTO } from "./dto/verifyScript.dto";
 
 @Controller("api")
 export class AppController {
@@ -28,5 +38,19 @@ export class AppController {
       body.content,
       body.source
     );
+  }
+
+  @Get("unverified-scripts/next")
+  async getNextUnverifiedScript(): Promise<NextScriptDto> {
+    return await this.appService.getNextUnverifiedScript();
+  }
+
+  @Patch("scripts/:id")
+  async verifyScript(
+    @Param("id", new ParseIntPipe()) id: number,
+    @Body() body: VerifyScriptDTO
+  ) {
+    await this.appService.verifyScript(id, body.isMalicious);
+    return { success: true };
   }
 }

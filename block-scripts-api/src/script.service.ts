@@ -44,4 +44,30 @@ export class ScriptService {
       },
     });
   }
+
+  async verifyScrypt(id: number, isMalicious: boolean): Promise<Script> {
+    return this.prisma.script.update({
+      where: { id },
+      data: { verified: true, isMalicious },
+    });
+  }
+
+  async getNextUnverifiedScript(): Promise<Script | null> {
+    return this.prisma.script.findFirst({
+      where: {
+        verified: false,
+      },
+      orderBy: {
+        usage: "desc",
+      },
+    });
+  }
+
+  async countUnverifiedScripts(): Promise<number> {
+    return this.prisma.script.count({
+      where: {
+        verified: false,
+      },
+    });
+  }
 }
