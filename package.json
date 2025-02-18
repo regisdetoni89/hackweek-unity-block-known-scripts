@@ -1,0 +1,25 @@
+{
+  "name": "hackweek-unity-block-known-scripts",
+  "version": "0.0.1",
+  "scripts": {
+    "setup": "concurrently \"npm:setup:*\"",
+    "setup:api": "cd block-scripts-api && npm install && npm run prisma:setup",
+    "setup:frontend": "cd block-scripts-frontend && npm install",
+    "dev": "concurrently \"npm:dev:*\"",
+    "dev:api": "cd block-scripts-api && npm run start:dev",
+    "dev:frontend": "cd block-scripts-frontend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "author": {
+    "name": "Régis de Toni",
+    "url": "https://github.com/regisdetoni89"
+  },
+  "contributors": [
+    {
+      "name": "Daniel Tostes",
+      "url": "https://github.com/tostesdaniel"
+    }
+  ]
+}
