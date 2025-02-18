@@ -22,7 +22,6 @@ csharp_preserve_single_line_blocks = true
 [*.{ts,tsx}]
 indent_style = space
 indent_size = 2
-quote_type = single
 
 [*.json]
 indent_style = space

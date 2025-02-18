@@ -1,49 +1,73 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
-import { Script, ScriptUser, Prisma } from '@prisma/client';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "./prisma.service";
+import { Script, ScriptUser, Prisma } from "@prisma/client";
 
 @Injectable()
 export class ScriptService {
+  constructor(private prisma: PrismaService) {}
 
-    constructor(private prisma: PrismaService) {}
+  async findByHash(hash: string): Promise<Script | null> {
+    return this.prisma.script.findFirst({
+      where: {
+        hash: hash,
+      },
+    });
+  }
 
-    async findByHash (hash: string): Promise<Script | null> {
+  async createScript(data: Prisma.ScriptCreateInput): Promise<Script> {
+    return this.prisma.script.create({
+      data,
+    });
+  }
 
-        return this.prisma.script.findFirst({
-          where: {
-            hash: hash,
-          },
-        });
-        
+  async createScriptUser(
+    data: Prisma.ScriptUserCreateInput
+  ): Promise<ScriptUser> {
+    return this.prisma.scriptUser.create({
+      data,
+    });
+  }
+
+  async increaseCounter(hash: string): Promise<Script | null> {
+    const script = await this.findByHash(hash);
+    if (!script) {
+      return null;
     }
+    return this.prisma.script.update({
+      where: {
+        id: script.id,
+      },
+      data: {
+        usage: {
+          increment: 1,
+        },
+      },
+    });
+  }
 
-    async createScript (data: Prisma.ScriptCreateInput): Promise<Script> {
-        return this.prisma.script.create({
-            data,
-        });
-    }
+  async verifyScrypt(id: number, isMalicious: boolean): Promise<Script> {
+    return this.prisma.script.update({
+      where: { id },
+      data: { verified: true, isMalicious },
+    });
+  }
 
-    async createScriptUser (data: Prisma.ScriptUserCreateInput): Promise<ScriptUser> {
-        return this.prisma.scriptUser.create({
-            data,
-        });
-    }
+  async getNextUnverifiedScript(): Promise<Script | null> {
+    return this.prisma.script.findFirst({
+      where: {
+        verified: false,
+      },
+      orderBy: {
+        usage: "desc",
+      },
+    });
+  }
 
-    async increaseCounter (hash: string): Promise<Script | null> {
-        const script = await this.findByHash(hash);
-        if (!script) {
-            return null;
-        }
-        return this.prisma.script.update({
-            where: {
-                id: script.id,
-            },
-            data: {
-                usage: {
-                    increment: 1,
-                },
-            },
-        });
-    }
-
+  async countUnverifiedScripts(): Promise<number> {
+    return this.prisma.script.count({
+      where: {
+        verified: false,
+      },
+    });
+  }
 }
