@@ -3,10 +3,11 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { PrismaService } from "./prisma.service";
 import { ScriptService } from "./script.service";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService, PrismaService, ScriptService],
+    imports: [ScheduleModule.forRoot()],
+    controllers: [AppController],
+    providers: [AppService, PrismaService, ScriptService],
 })
 export class AppModule {}

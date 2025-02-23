@@ -1,7 +1,7 @@
 export class VerifyScriptDTO {
-  isMalicious: boolean;
+    isMalicious: boolean;
 
-  constructor(isMalicious: boolean) {
-    this.isMalicious = isMalicious;
-  }
+    constructor(isMalicious: boolean) {
+        this.isMalicious = isMalicious;
+    }
 }
