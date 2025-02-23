@@ -52,6 +52,13 @@ export class ScriptService {
         });
     }
 
+    async updateAlertKeywordFound(id: number, keywordAlertCount: number): Promise<Script> {
+        return this.prisma.script.update({
+            where: { id },
+            data: { alertKeywordFound: keywordAlertCount },
+        });
+    }
+
     async getNextUnverifiedScript(): Promise<Script | null> {
         return this.prisma.script.findFirst({
             where: {
@@ -62,6 +69,28 @@ export class ScriptService {
                 alertKeywordFound: "desc",
             },
         });
+    }
+
+    async getScriptsThatHaventBeenCheckByKeywords(limit: number): Promise<Script[] | null> {
+        return this.prisma.script.findMany({
+            where: {
+                verified: false,
+                alertKeywordFound: -1,
+            },
+            orderBy: {
+                usage: "desc",
+            },
+            take: limit
+        });
+    }
+
+    async getAllAlertKeywords(): Promise<string[]> {
+        const keywordsString:string[] = [];
+        const keywords = await this.prisma.alertKeyword.findMany();
+        for (const keyword of keywords) {
+          keywordsString.push(keyword.name);
+        }
+        return keywordsString;
     }
 
     async countUnverifiedScripts(): Promise<number> {
