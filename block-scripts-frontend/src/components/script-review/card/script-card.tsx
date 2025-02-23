@@ -36,7 +36,12 @@ export function ScriptCard({ script }: ScriptCardProps) {
           </div>
           <div>
             <span className="text-muted-foreground">
-              Detected <span className="font-bold">{script.usage}</span> times
+              Used <span className="font-bold text-yellow">{script.usage}</span> times
+            </span>
+          </div>
+          <div>
+            <span className="text-muted-foreground">
+              Detected Keywords <span className="font-bold text-red">{script.alertKeywordFound}</span> times
             </span>
           </div>
         </CardDescription>

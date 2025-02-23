@@ -4,6 +4,7 @@ export interface Script {
   content: string;
   source: string;
   usage: number;
+  alertKeywordFound: number;
   verified: boolean;
   isMalicious: boolean;
   createdAt: string;

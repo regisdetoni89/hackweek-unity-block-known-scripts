@@ -103,3 +103,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.text-red{
+  @apply text-red-500;
+}
+.text-yellow{
+  @apply text-yellow-500;
+}
