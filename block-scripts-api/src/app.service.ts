@@ -56,7 +56,7 @@ export class AppService {
                 hash: hash,
                 steamId: steamId,
             });
-        } catch (e) {}
+        } catch { /* empty */ }
     }
 
     async increaseCounter(hash: string): Promise<void> {
