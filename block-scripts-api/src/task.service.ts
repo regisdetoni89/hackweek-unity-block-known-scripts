@@ -15,6 +15,7 @@ export class TaskService {
         }
     )
     async handleCron() {
+
         const scripts:Script[] | null = await this.script.getScriptsThatHaventBeenCheckByKeywords(20);
         if(scripts == null){
             return;
