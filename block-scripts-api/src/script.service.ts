@@ -64,10 +64,11 @@ export class ScriptService {
             where: {
                 verified: false,
             },
-            orderBy: {
+            orderBy: [{
                 usage: "desc",
+            }, {
                 alertKeywordFound: "desc",
-            },
+            }],
         });
     }
 
